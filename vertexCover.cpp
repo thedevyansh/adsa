@@ -1,17 +1,17 @@
 
-#include<iostream>
+#include <iostream>
 #include <list>
 using namespace std;
 
-
 class Graph
 {
-	int V; 
-	list<int> *adj; 
+	int V;
+	list<int> *adj;
+
 public:
-	Graph(int V); 
-	void addEdge(int v, int w); 
-	void printVertexCover(); 
+	Graph(int V);
+	void addEdge(int v, int w);
+	void printVertexCover();
 };
 
 Graph::Graph(int V)
@@ -23,26 +23,24 @@ Graph::Graph(int V)
 void Graph::addEdge(int v, int w)
 {
 	adj[v].push_back(w);
-	adj[w].push_back(v); 
+	adj[w].push_back(v);
 }
-
 
 void Graph::printVertexCover()
 {
-	
+
 	bool visited[V];
-	for (int i=0; i<V; i++)
+	for (int i = 0; i < V; i++)
 		visited[i] = false;
 
 	list<int>::iterator i;
 
-
-	for (int u=0; u<V; u++)
+	for (int u = 0; u < V; u++)
 	{
-	
+
 		if (visited[u] == false)
 		{
-			for (i= adj[u].begin(); i != adj[u].end(); ++i)
+			for (i = adj[u].begin(); i != adj[u].end(); ++i)
 			{
 				int v = *i;
 				if (visited[v] == false)
@@ -55,12 +53,10 @@ void Graph::printVertexCover()
 		}
 	}
 
-
-	for (int i=0; i<V; i++)
+	for (int i = 0; i < V; i++)
 		if (visited[i])
-		cout << i << " ";
+			cout << i << " ";
 }
-
 
 int main()
 {
@@ -76,4 +72,3 @@ int main()
 
 	return 0;
 }
-

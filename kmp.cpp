@@ -1,5 +1,5 @@
 
-#include <bits/stdc++.h>
+#include <iostream>
 
 void computeLPSArray(char* pat, int M, int* lps);
 

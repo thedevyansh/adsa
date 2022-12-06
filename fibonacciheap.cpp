@@ -1,25 +1,26 @@
-#include<bits/stdc++.h>
+#include <iostream>
+#include <cmath>
 using namespace std;
 
-struct node {
-	node* parent; 
-	node* child; 
-	node* left; 
-	node* right; 
-	int key; 
-	int degree; 
-	char mark; 
-	char c; 
+struct node
+{
+	node *parent;
+	node *child;
+	node *left;
+	node *right;
+	int key;
+	int degree;
+	char mark;
+	char c;
 };
 
-
-struct node* mini = NULL;
+struct node *mini = NULL;
 
 int no_of_nodes = 0;
 
 void insertion(int val)
 {
-	struct node* new_node = new node();
+	struct node *new_node = new node();
 	new_node->key = val;
 	new_node->degree = 0;
 	new_node->mark = 'W';
@@ -28,7 +29,8 @@ void insertion(int val)
 	new_node->child = NULL;
 	new_node->left = new_node;
 	new_node->right = new_node;
-	if (mini != NULL) {
+	if (mini != NULL)
+	{
 		(mini->left)->right = new_node;
 		new_node->right = mini;
 		new_node->left = mini->left;
@@ -36,13 +38,14 @@ void insertion(int val)
 		if (new_node->key < mini->key)
 			mini = new_node;
 	}
-	else {
+	else
+	{
 		mini = new_node;
 	}
 	no_of_nodes++;
 }
 
-void Fibonnaci_link(struct node* ptr2, struct node* ptr1)
+void Fibonnaci_link(struct node *ptr2, struct node *ptr1)
 {
 	(ptr2->left)->right = ptr2->right;
 	(ptr2->right)->left = ptr2->left;
@@ -67,19 +70,22 @@ void Consolidate()
 	int temp1;
 	float temp2 = (log(no_of_nodes)) / (log(2));
 	int temp3 = temp2;
-	struct node* arr[temp3+1];
+	struct node *arr[temp3 + 1];
 	for (int i = 0; i <= temp3; i++)
 		arr[i] = NULL;
-	node* ptr1 = mini;
-	node* ptr2;
-	node* ptr3;
-	node* ptr4 = ptr1;
-	do {
+	node *ptr1 = mini;
+	node *ptr2;
+	node *ptr3;
+	node *ptr4 = ptr1;
+	do
+	{
 		ptr4 = ptr4->right;
 		temp1 = ptr1->degree;
-		while (arr[temp1] != NULL) {
+		while (arr[temp1] != NULL)
+		{
 			ptr2 = arr[temp1];
-			if (ptr1->key > ptr2->key) {
+			if (ptr1->key > ptr2->key)
+			{
 				ptr3 = ptr1;
 				ptr1 = ptr2;
 				ptr2 = ptr3;
@@ -96,11 +102,14 @@ void Consolidate()
 		ptr1 = ptr1->right;
 	} while (ptr1 != mini);
 	mini = NULL;
-	for (int j = 0; j <= temp3; j++) {
-		if (arr[j] != NULL) {
+	for (int j = 0; j <= temp3; j++)
+	{
+		if (arr[j] != NULL)
+		{
 			arr[j]->left = arr[j];
 			arr[j]->right = arr[j];
-			if (mini != NULL) {
+			if (mini != NULL)
+			{
 				(mini->left)->right = arr[j];
 				arr[j]->right = mini;
 				arr[j]->left = mini->left;
@@ -108,7 +117,8 @@ void Consolidate()
 				if (arr[j]->key < mini->key)
 					mini = arr[j];
 			}
-			else {
+			else
+			{
 				mini = arr[j];
 			}
 			if (mini == NULL)
@@ -119,20 +129,22 @@ void Consolidate()
 	}
 }
 
-
 void Extract_min()
 {
 	if (mini == NULL)
 		cout << "The heap is empty" << endl;
-	else {
-		node* temp = mini;
-		node* pntr;
+	else
+	{
+		node *temp = mini;
+		node *pntr;
 		pntr = temp;
-		node* x = NULL;
-		if (temp->child != NULL) {
+		node *x = NULL;
+		if (temp->child != NULL)
+		{
 
 			x = temp->child;
-			do {
+			do
+			{
 				pntr = x->right;
 				(mini->left)->right = x;
 				x->right = mini;
@@ -149,7 +161,8 @@ void Extract_min()
 		mini = temp->right;
 		if (temp == temp->right && temp->child == NULL)
 			mini = NULL;
-		else {
+		else
+		{
 			mini = temp->right;
 			Consolidate();
 		}
@@ -157,8 +170,7 @@ void Extract_min()
 	}
 }
 
-
-void Cut(struct node* found, struct node* temp)
+void Cut(struct node *found, struct node *temp)
 {
 	if (found == found->right)
 		temp->child = NULL;
@@ -179,23 +191,24 @@ void Cut(struct node* found, struct node* temp)
 	found->mark = 'B';
 }
 
-
-void Cascase_cut(struct node* temp)
+void Cascase_cut(struct node *temp)
 {
-	node* ptr5 = temp->parent;
-	if (ptr5 != NULL) {
-		if (temp->mark == 'W') {
+	node *ptr5 = temp->parent;
+	if (ptr5 != NULL)
+	{
+		if (temp->mark == 'W')
+		{
 			temp->mark = 'B';
 		}
-		else {
+		else
+		{
 			Cut(temp, ptr5);
 			Cascase_cut(ptr5);
 		}
 	}
 }
 
-
-void Decrease_key(struct node* found, int val)
+void Decrease_key(struct node *found, int val)
 {
 	if (mini == NULL)
 		cout << "The Heap is Empty" << endl;
@@ -205,8 +218,9 @@ void Decrease_key(struct node* found, int val)
 
 	found->key = val;
 
-	struct node* temp = found->parent;
-	if (temp != NULL && found->key < temp->key) {
+	struct node *temp = found->parent;
+	if (temp != NULL && found->key < temp->key)
+	{
 		Cut(found, temp);
 		Cascase_cut(temp);
 	}
@@ -214,20 +228,21 @@ void Decrease_key(struct node* found, int val)
 		mini = found;
 }
 
-
-void Find(struct node* mini, int old_val, int val)
+void Find(struct node *mini, int old_val, int val)
 {
-	struct node* found = NULL;
-	node* temp5 = mini;
+	struct node *found = NULL;
+	node *temp5 = mini;
 	temp5->c = 'Y';
-	node* found_ptr = NULL;
-	if (temp5->key == old_val) {
+	node *found_ptr = NULL;
+	if (temp5->key == old_val)
+	{
 		found_ptr = temp5;
 		temp5->c = 'N';
 		found = found_ptr;
 		Decrease_key(found, val);
 	}
-	if (found_ptr == NULL) {
+	if (found_ptr == NULL)
+	{
 		if (temp5->child != NULL)
 			Find(temp5->child, old_val, val);
 		if ((temp5->right)->c != 'Y')
@@ -237,14 +252,13 @@ void Find(struct node* mini, int old_val, int val)
 	found = found_ptr;
 }
 
-
 void Deletion(int val)
 {
 	if (mini == NULL)
 		cout << "The heap is empty" << endl;
-	else {
+	else
+	{
 
-		
 		Find(mini, val, 0);
 
 		Extract_min();
@@ -252,28 +266,29 @@ void Deletion(int val)
 	}
 }
 
-
 void display()
 {
-	node* ptr = mini;
+	node *ptr = mini;
 	if (ptr == NULL)
 		cout << "The Heap is Empty" << endl;
 
-	else {
+	else
+	{
 		cout << "The root nodes of Heap are: " << endl;
-		do {
+		do
+		{
 			cout << ptr->key;
 			ptr = ptr->right;
-			if (ptr != mini) {
+			if (ptr != mini)
+			{
 				cout << "-->";
 			}
 		} while (ptr != mini && ptr->right != NULL);
 		cout << endl
-			<< "The heap has " << no_of_nodes << " nodes" << endl
-			<< endl;
+			 << "The heap has " << no_of_nodes << " nodes" << endl
+			 << endl;
 	}
 }
-
 
 int main()
 {
@@ -298,4 +313,3 @@ int main()
 
 	return 0;
 }
-
